@@ -9,4 +9,4 @@ Other public sequencing data can be accessed from respective database ID describ
 
 Any additional information required to reanalyze the data reported in this project is available from the lead contact upon request.
 
--Magnificence
+

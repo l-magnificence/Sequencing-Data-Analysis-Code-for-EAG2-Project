@@ -35,8 +35,8 @@ pca.data <- data.frame(Sample=rownames(pca$x),
 identical(rownames(EMTAB_2693_phe),rownames(pca.data))
 pca.data<-cbind(pca.data,EMTAB_2693_phe)
 
-pca.var <- pca$sdev^2  ## sdev是标准偏差，十个样本，就有十个标准偏差，平方是避免负数的干扰
-pca.var.per <- round(pca.var/sum(pca.var)*100, 1)  ##求每个样本的variation
+pca.var <- pca$sdev^2  
+pca.var.per <- round(pca.var/sum(pca.var)*100, 1)  
 
 tiff('./version2/fig/cluster7_TMZtherapy_GBM_PCA.tiff',units ="in",width = 5.8,height = 3.8,res = 1200,compression ='zip')
 ggplot(pca.data, aes(x=X,y=Y,color=type,shape=patient),size=5) +
@@ -181,64 +181,6 @@ res$ang[which(res$ang < -90)] <- (180+res$ang)[which(res$ang < -90)]
 res$color<-ifelse(res$type=="TMZ resistant","#A70B00","#F5A200")
 
 colnames(tmp)[4]<-"Log2FC"
-
-# ggplot(tmp,aes(x = var,y = variable)) +
-#   geom_tile(aes(fill = Log2FC),color = 'white') +
-#   scale_fill_gradient2(midpoint = 0,
-#                        low = '#3C8DAD',
-#                        mid="white",
-#                        high = '#A71B4B') +
-#   scale_y_discrete(expand = expansion(mult = c(3,0))) +
-#   scale_x_discrete(expand = expansion(mult = c(0,0.05))) +
-#   coord_polar(theta = 'x') +
-#   theme_void() +
-#   geom_text(data = res,
-#             aes(x = as.numeric(rownames(res)),
-#                 y = 2.6,
-#                 label = gene, angle = ang, hjust = hjust),
-#             color = res$color,
-#             size = 3.5)+
-#   theme(legend.position = c(0.5,0.5))
-# 
-# tiff('./version2/fig/cluster7_TMZtherapy_gene.tiff',units ="in",width = 6.5,height = 6.5,res = 1200,compression ='zip')
-# ggplot(tmp,aes(x = var,y = variable)) +
-#   geom_tile(aes(fill = Log2FC),color = 'white') +
-#   scale_fill_gradientn(colours =paletteer::paletteer_c("ggthemes::Classic Red", 30)) +
-#   scale_y_discrete(expand = expansion(mult = c(3,0))) +
-#   scale_x_discrete(expand = expansion(mult = c(0,0.05))) +
-#   coord_polar(theta = 'x') +
-#   theme_void() +
-#   geom_text(data = res,
-#             aes(x = as.numeric(rownames(res)),
-#                 y = 2.6,
-#                 label = gene, angle = ang, hjust = hjust),
-#             color = res$color,
-#             size = 3.5)+
-#   theme(legend.position = c(0.5,0.5))
-# dev.off()
-# 
-# tiff('./version2/fig/cluster7_TMZtherapy_gene.tiff',units ="in",width = 6.5,height = 4.8,res = 1200,compression ='zip')
-# ggplot() +
-#   geom_tile(data = tmp[which(tmp$variable == 'log2FC_scRNAseq'),],
-#             aes(x = 1:nrow(res),y = 1,fill = Log2FC),
-#             color = 'white') +
-#   scale_fill_gradientn(colours =paletteer::paletteer_c("ggthemes::Classic Red", 30),name="log2FC in sc")+
-#   new_scale("fill") +
-#   geom_tile(data = tmp[which(tmp$variable == 'log2FC_clones'),],
-#             aes(x = 1:nrow(res),y = 2,fill = Log2FC),
-#             color = 'white') +
-#   scale_fill_gradient2(midpoint = 0,low = '#3C8DAD', mid="white", high = '#A71B4B',name="log2FC in clones") +
-#   ylim(-2,3) +
-#   coord_polar(theta = 'x') +
-#   theme_void()+
-#   geom_text(data = res,
-#             aes(x = as.numeric(rownames(res)),
-#                 y = 2.6,
-#                 label = gene, angle = ang, hjust = hjust),
-#             color = res$color,
-#             size = 3.5,) +
-#   xlim(0,55)
-# dev.off()
 
 tiff('./version2/fig/cluster7_TMZtherapy_gene.tiff',units ="in",width = 9.5,height = 6.5,res = 1200,compression ='zip')
 ggplot() +

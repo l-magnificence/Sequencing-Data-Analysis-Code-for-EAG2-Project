@@ -334,56 +334,5 @@ ggplot(ssGSEA[-which(is.na(ssGSEA$Grade)),] ,aes(x = Grade, y = cluster7, fill =
         plot.title = element_text(hjust = 0.5))
 dev.off()
 
-###---------------------- cluster7 signature and M1 M2 macrophage propotion----------------------
-##cibersort
-tcga_bulk_cluster7 <- readRDS("~/scRNA_GBM_integration/Martin_project/version2/processed_data/tcga_bulk_cluster7.rds")
-tcga_meta<-readRDS("~/bioinfo_mill/dataset/tcga_glioma/processed/TCGA_glioma_meta_2016cell.rds")
-tcga_expr<-readRDS("~/bioinfo_mill/dataset/tcga_glioma/processed/TCGA_glioma_expr_log2tpm_2016cell.rds")
-tcga_expr[1:5,1:5]
-
-tpm_expr<-2^tcga_expr-1
-tpm_expr[1:5,1:5]
-write.table(as.matrix(tpm_expr), file='./version2/processed_data/TAM/tcga_cibersort_input.tsv', quote=FALSE, sep='\t', col.names = T)
-
-source("~/software/CIBERSORT.R") 
-cibersort_result = CIBERSORT("~/software/LM22.txt", "./version2/processed_data/TAM/tcga_cibersort_input.tsv", perm=100, QN=T)
-saveRDS(cibersort_result,file="./version2/processed_data/TAM/tcga_cibersort_result.rds")
-
-#plot
-cibersort_result<-readRDS(file="./version2/processed_data/TAM/tcga_cibersort_result.rds")
-cibersort_result<-as.data.frame(cibersort_result)
-identical(rownames(tcga_bulk_cluster7),rownames(cibersort_result))
-cibersort_result$cluster7<-tcga_bulk_cluster7$cluster7
-identical(tcga_meta$Case,rownames(cibersort_result))
-cibersort_result$study<-tcga_meta$Study
-
-table(cibersort_result$study)
-source("~/scRNA_GBM_integration/tacan_project/code/function.R")
-cor_plot(cibersort_result[cibersort_result$study=="Glioblastoma multiforme",],"cluster7","Macrophages M1")
-cor_plot(cibersort_result[cibersort_result$study=="Glioblastoma multiforme",],"cluster7","Macrophages M2")
-cor_plot(cibersort_result,"cluster7","Macrophages M2")
-cor_plot(cibersort_result,"cluster7","Macrophages M1")
-
-##ssgsea
-macrophage_signatures <- readRDS("~/scRNA_GBM_integration/Martin_project/version2/processed_data/TAM/macrophage_signatures.rds")
-ssGSEA<-gsva(as.matrix(tcga_expr), macrophage_signatures,method="ssgsea")
-ssGSEA<-as.data.frame(t(ssGSEA))
-identical(rownames(ssGSEA),rownames(tcga_bulk_cluster7))
-ssGSEA$cluster7<-tcga_bulk_cluster7$cluster7
-identical(tcga_meta$Case,rownames(ssGSEA))
-ssGSEA$study<-tcga_meta$Study
-
-cor_plot(ssGSEA,"cluster7","M2")
-cor_plot(ssGSEA,"cluster7","M1")
-cor_plot(ssGSEA[ssGSEA$study=="Glioblastoma multiforme",],"cluster7","M1")
-cor_plot(ssGSEA[ssGSEA$study=="Glioblastoma multiforme",],"cluster7","M2")
-
-## correlation between cluster7 and LGALS3
-identical(rownames(tcga_bulk_cluster7),colnames(tcga_expr))
-tcga_bulk_cluster7$LGALS3<-t(tcga_expr["LGALS3",])[,1]
-
-tiff('./version2/fig/TME/cluster7_LGALS3_cor_tcga_glioma.tiff',units ="in",width = 5,height = 5,res = 1200,compression ='zip') 
-cor_plot(tcga_bulk_cluster7,"cluster7","LGALS3","pearson")
-dev.off()
 
 

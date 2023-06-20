@@ -138,7 +138,7 @@ group <-dat_select$group
 group <- factor(group, levels = c("Low", "High"))
 survival_dat <- data.frame(group = group)
 fit <- survfit(mySurv ~ group)
-#计算HR以及95%CI
+
 data.survdiff <- survdiff(mySurv ~ group)
 p.val = 1 - pchisq(data.survdiff$chisq, length(data.survdiff$n) - 1)
 HR = (data.survdiff$obs[2]/data.survdiff$exp[2])/(data.survdiff$obs[1]/data.survdiff$exp[1])
@@ -149,21 +149,16 @@ CI <- paste("95% CI: ", paste(round(low95,2), round(up95,2), sep = " - "), sep =
 svsort <- dat_select[order(dat_select[,"cluster7"]),]
 
 splot[[1]]<-ggsurvplot(fit, data = survival_dat ,
-                       #ggtheme = theme_bw(), #想要网格就运行这行
-                       conf.int = T, #不画置信区间，想画置信区间就把F改成T
-                       #conf.int.style = "step",#置信区间的类型，还可改为ribbon
-                       censor = F, #不显示观察值所在的位置
-                       palette = c("#1B9E77","#D95F02"), #线的颜色对应高、低
-                       
-                       legend.title = paste0("Cluster7 signature"," expression"),#基因名写在图例题目的位置
-                       font.legend = 10,#图例的字体大小
-                       font.title = 12,font.x = 11,font.y = 11,#设置其他字体大小
-                       
-                       #在图例上标出高低分界点的表达量，和组内sample数量
+                       #ggtheme = theme_bw(), 
+                       conf.int = T, 
+                       #conf.int.style = "step",
+                       censor = F, 
+                       palette = c("#1B9E77","#D95F02"), 
+                       legend.title = paste0("Cluster7 signature"," expression"),
+                       font.legend = 10,
+                       font.title = 12,font.x = 11,font.y = 11,
                        legend.labs=c(paste0("Low","(",fit$n[1],")"),
                                      paste0("High","(",fit$n[2],")")),
-                       #在左下角标出pvalue、HR、95% CI
-                       #太小的p value标为p < 0.001
                        pval = paste(pval = ifelse(p.val < 0.001, "p < 0.001", 
                                                   paste("p = ",round(p.val,3), sep = "")),
                                     HR, CI, sep = "\n"),
@@ -211,7 +206,6 @@ group <- factor(group, levels = c("low", "high"))
 survival_dat <- data.frame(group = group)
 fit <- survfit(mySurv ~ group)
 
-#计算HR以及95%CI
 data.survdiff <- survdiff(mySurv ~ group)
 p.val = 1 - pchisq(data.survdiff$chisq, length(data.survdiff$n) - 1)
 HR = (data.survdiff$obs[2]/data.survdiff$exp[2])/(data.survdiff$obs[1]/data.survdiff$exp[1])
@@ -222,21 +216,16 @@ CI <- paste("95% CI: ", paste(round(low95,2), round(up95,2), sep = " - "), sep =
 svsort <- dat_select[order(dat_select[,"cluster7"]),]
 
 splot[[1]]<-ggsurvplot(fit, data = survival_dat ,
-                       #ggtheme = theme_bw(), #想要网格就运行这行
-                       conf.int = T, #不画置信区间，想画置信区间就把F改成T
-                       #conf.int.style = "step",#置信区间的类型，还可改为ribbon
-                       censor = F, #不显示观察值所在的位置
-                       palette = c("#1B9E77","#D95F02"), #线的颜色对应高、低
-                       
-                       legend.title = paste0("Cluster7 signature"," expression"),#基因名写在图例题目的位置
-                       font.legend = 10,#图例的字体大小
-                       font.title = 12,font.x = 11,font.y = 11,#设置其他字体大小
-                       
-                       #在图例上标出高低分界点的表达量，和组内sample数量
+                       #ggtheme = theme_bw(), 
+                       conf.int = T, 
+                       #conf.int.style = "step",
+                       censor = F, 
+                       palette = c("#1B9E77","#D95F02"), 
+                       legend.title = paste0("Cluster7 signature"," expression"),
+                       font.legend = 10,
+                       font.title = 12,font.x = 11,font.y = 11,
                        legend.labs=c(paste0("Low","(",fit$n[1],")"),
                                      paste0("High","(",fit$n[2],")")),
-                       #在左下角标出pvalue、HR、95% CI
-                       #太小的p value标为p < 0.001
                        pval = paste(pval = ifelse(p.val < 0.001, "p < 0.001", 
                                                   paste("p = ",round(p.val,3), sep = "")),
                                     HR, CI, sep = "\n"),
@@ -268,7 +257,6 @@ group <- factor(group, levels = c("low", "high"))
 survival_dat <- data.frame(group = group)
 fit <- survfit(mySurv ~ group)
 
-#计算HR以及95%CI
 data.survdiff <- survdiff(mySurv ~ group)
 p.val = 1 - pchisq(data.survdiff$chisq, length(data.survdiff$n) - 1)
 HR = (data.survdiff$obs[2]/data.survdiff$exp[2])/(data.survdiff$obs[1]/data.survdiff$exp[1])
@@ -279,21 +267,16 @@ CI <- paste("95% CI: ", paste(round(low95,2), round(up95,2), sep = " - "), sep =
 svsort <- dat_select[order(dat_select[,"cluster7"]),]
 
 splot[[2]]<-ggsurvplot(fit, data = survival_dat ,
-                       #ggtheme = theme_bw(), #想要网格就运行这行
-                       conf.int = T, #不画置信区间，想画置信区间就把F改成T
-                       #conf.int.style = "step",#置信区间的类型，还可改为ribbon
-                       censor = F, #不显示观察值所在的位置
-                       palette = c("#1B9E77","#D95F02"), #线的颜色对应高、低
-                       
-                       legend.title = paste0("Cluster7 signature"," expression"),#基因名写在图例题目的位置
-                       font.legend = 10,#图例的字体大小
-                       font.title = 12,font.x = 11,font.y = 11,#设置其他字体大小
-                       
-                       #在图例上标出高低分界点的表达量，和组内sample数量
+                       #ggtheme = theme_bw(), 
+                       conf.int = T, 
+                       #conf.int.style = "step",
+                       censor = F, 
+                       palette = c("#1B9E77","#D95F02"),
+                       legend.title = paste0("Cluster7 signature"," expression"),
+                       font.legend = 10,
+                       font.title = 12,font.x = 11,font.y = 11,
                        legend.labs=c(paste0("Low","(",fit$n[1],")"),
                                      paste0("High","(",fit$n[2],")")),
-                       #在左下角标出pvalue、HR、95% CI
-                       #太小的p value标为p < 0.001
                        pval = paste(pval = ifelse(p.val < 0.001, "p < 0.001", 
                                                   paste("p = ",round(p.val,3), sep = "")),
                                     HR, CI, sep = "\n"),

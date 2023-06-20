@@ -290,65 +290,9 @@ FeaturePlot(tumor,features = c("SYNAPSE"),reduction = "umap",ncol =1,min.cutoff 
 dev.off()
 
 
-###--------------------supplement GJB2--------------------
-tumor<-readRDS(file = "~/scRNA_GBM_integration/Martin_project/version2/processed_data/Ctrl_DIP_tumor_sample.rds")
-cells_AUC <- readRDS("~/scRNA_GBM_integration/Martin_project/version2/processed_data/genesets_AUC_tumor.rds")
-res<-tumor@meta.data
-res<-dplyr::select(res,c("orig.ident","cluster"))
-for (i in cells_AUC@NAMES) {
-  aucs <- as.numeric(getAUC(cells_AUC)[i,])
-  res$AUC<-aucs
-  colnames(res)[colnames(res)=="AUC"]<-i
-}
-res[,3:7]<-apply(res[,3:7],2,min.max.norm)
 
-tmp<-tumor@assays[["RNA"]]@data
-identical(colnames(tmp),rownames(res))
-res$LGALS3<-tmp["LGALS3",]
-res$Neuron_group<-ifelse(res$Neuron>mean(res[res$cluster=="Cluster7","Neuron"]),"High","Low")
-res$GJB2<-tmp["GJB2",]
 
-res$GJB2_neuron_coexpr<-ifelse(res$Neuron>mean(res[res$cluster=="Cluster7","Neuron"]) & res$GJB2>mean(res[res$cluster=="Cluster7","GJB2"]),"high coexpr","none")
-tumor <- AddMetaData(object = tumor, metadata = res[,3:11], col.name = colnames(res)[3:11])
 
-tiff('./version2/fig/TME/GJB2_neuron_coexpr.tiff',units ="in",width = 5.9,height = 4.5,res = 1200,compression ='zip')
-DimPlot(tumor,group.by = "GJB2_neuron_coexpr",cols =c("#34B8C0FF","#F5F5F5"))
-dev.off()
-
-tiff('./version2/fig/TME/GJB2_expr_umap.tiff',units ="in",width = 3.4,height = 3.2,res = 1200,compression ='zip')
-FeaturePlot(tumor,features =c("GJB2"),reduction = "umap",min.cutoff = quantile(res$GJB2,0.7),
-            cols =paletteer::paletteer_c("grDevices::Purple-Yellow", 5 ,direction = -1)) 
-dev.off()
-
-VlnPlot(tumor,features = c("Neuron","GJB2"),stack = T,flip = T,group.by = "cluster")+NoLegend()+xlab("")+
-  labs(title="")+theme(plot.title = element_text(hjust = 0.5))
-
-ggplot(data = res,aes(x = cluster, y = GJB2, fill = cluster))+
-  #scale_fill_manual(values =c("#EF6A63","#A1C8DC"))+
-  geom_violin(alpha=0.25, position = position_dodge(width = .75),size=1,color="NA") +
-  #geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.2, alpha = 0.7)+
-  theme_classic()+
-  labs(title = "")+
-  ylab("GJB2 expression") +
-  xlab("") +
-  # stat_compare_means(aes(group=orig.ident),method = "wilcox.test",hide.ns = F,label.x = 1.5,
-  #                    label = "p.signif")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-        #panel.border = element_rect(colour = "black", fill=NA, size=0.2),
-        axis.ticks = element_line(size=0.2, color="black"),
-        axis.ticks.length = unit(0.2, "cm"),
-        axis.title = element_text(size = 10),
-        axis.text = element_text(size = 10),
-        #legend.position = "none",
-        plot.title = element_text(hjust = 0.5))
-
-gap<-c("GJA1","GJA3","GJA4","GJA5","GJA6P","GJA8","GJA9","GJA10",
-       "GJB1","GJB2","GJB3","GJB4","GJB5","GJB6","GJB7",
-       "GJC1","GJC2","GJC3","GJD2","GJD3","GJD4","GJE1")
-
-FeaturePlot(tumor,features = c("GAP43","THBS1","TGFB1","CTNND1","TTYH1","SMAD1","SMAD2","SMAD3","SMAD4","SMAD5",
-                               "SMAD6","SMAD7","SMAD8","SMAD9"),reduction = "umap",ncol =4,
-            cols =paletteer::paletteer_c("grDevices::Purple-Yellow", 5 ,direction = -1))
 
 
 

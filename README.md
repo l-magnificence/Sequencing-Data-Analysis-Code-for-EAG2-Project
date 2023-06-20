@@ -1,5 +1,5 @@
 # Sequencing-Data-Analysis-Code-for-EAG2-Project
-A designer peptide to treat glioblastoma by targeting cancer-neuron interaction
+Cite: A designer peptide to treat glioblastoma by targeting cancer-neuron interaction.
 
 This code repository is supportive for sequencing data analysis of EAG2 project from Xi Huang Lab, Sickkids, CA.
 
